@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+    "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fh.dao.ProductMapper">
+
+
+    <select id="queryCount" parameterType="ProductSearchParam" resultType="long">
+        select count(*) from t_product p
+    </select>
+
+    <select id="queryList" parameterType="ProductSearchParam" resultType="Product">
+        select *from t_product p left join t_brand b  on p.brandId=b.id
+        order by p.id desc
+        limit #{start},#{length}
+
+    </select>
+
+
+    <!--更新热销非热销-->
+    <update id="updateIshotById" parameterType="com.fh.model.Product">
+    UPDATE t_product SET isHot = #{isHot} WHERE id=#{id}
+</update>
+
+    <!--更新上架下架-->
+    <update id="updateStatus" parameterType="com.fh.model.Product">
+    update t_product set  status = #{status} where id = #{id}
+    </update>
+
+
+    <!--新增-->
+    <insert id="addProduct" parameterType="com.fh.model.Product">
+        insert into t_product(productName,price,brandId,createDate,isHot,status,stock,insertTime,mainImagePath)
+        values (#{productName},#{price},#{brandId},#{createDate},#{isHot},#{status},#{stock},#{insertTime},#{mainImagePath})
+    </insert>
+
+    <!--根据id查询-->
+    <select id="queryListById" parameterType="Long" resultType="com.fh.model.Product">
+        select * from t_product where id = #{id}
+    </select>
+
+    <!--修改-->
+    <update id="updateProduct" parameterType="com.fh.model.Product">
+        update t_product set productName=#{productName},price=#{price},brandId=#{brandId},mainImagePath=#{mainImagePath},
+        updateTime=#{updateTime}
+        where id = #{id}
+    </update>
+
+    <!--删除-->
+    <delete id="deleteProduct" parameterType="Long">
+        delete from t_product where id = #{asdasd}
+    </delete>
+
+</mapper>

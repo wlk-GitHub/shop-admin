@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+	例如namespace="com.szh.mapper.personMapper"就是com.szh.mapper(包名)+personMapper(personMapper.xml文件去除后缀) -->
+<mapper namespace="com.fh.dao.GuanLiMapper">
+    <sql id="whereSql">
+        <!--
+              作用:1.自动在SQL语句后拼上where关键字
+                   2.自动去掉第一个查询条件前面的and
+          -->
+        <where>
+            <if test="memberName != null and memberName != ''">
+                and memberName like concat('%',#{memberName},'%')
+            </if>
+
+            <if test="realName != null and realName != ''">
+                and realName like concat('%',#{realName},'%')
+            </if>
+
+
+            <if test="minBirthday != null">
+              and birthday >= #{minBirthday}
+            </if>
+
+
+            <if test="maxBirthday != null">
+            and birthday &lt;= #{maxBirthday}
+            </if>
+
+            <if test="shengId !=null and shengId>-1">
+                and shengId = #{shengId}
+            </if>
+
+            <if test="shiId !=null and shiId>-1">
+                and shiId = #{shiId}
+            </if>
+
+            <if test="xianId !=null and xianId>-1">
+                and xianId = #{xianId}
+            </if>
+
+
+
+
+        </where>
+    </sql>
+    <select id="queryCount" parameterType="MemberQuery" resultType="long">
+        select count(*) from t_member m
+        <include refid="whereSql"></include>
+    </select>
+
+    <select id="queryList" parameterType="MemberQuery" resultType="Member">
+
+        select *from t_member m
+        <include refid="whereSql"></include>
+        limit #{start},#{length}
+    </select>
+
+    <select id="findMemberByName" parameterType="string" resultType="com.fh.model.Member">
+        select * from t_member where memberName=#{memberName}
+    </select>
+
+
+</mapper>
